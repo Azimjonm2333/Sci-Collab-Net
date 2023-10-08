@@ -24,6 +24,16 @@ class UserShortSerializer(serializers.ModelSerializer):
         )
 
 
+class UserUsernameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username'
+        )
+
+
 class UserProfileUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:

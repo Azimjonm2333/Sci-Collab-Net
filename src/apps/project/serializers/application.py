@@ -1,10 +1,12 @@
 from rest_framework import serializers
 from src.apps.project.models import Application
 from src.apps.accounts.serializers import UserListSerializer
+from src.apps.project.serializers import ProjectApplicationSerializer
 
 
 class ApplicationListSerializer(serializers.ModelSerializer):
-
+    
+    project = ProjectApplicationSerializer()
     user = UserListSerializer()
 
     class Meta:
@@ -19,6 +21,8 @@ class ApplicationListSerializer(serializers.ModelSerializer):
 
 
 class ApplicationCreateSerializer(serializers.ModelSerializer):
+    
+    project = ProjectApplicationSerializer()
 
     class Meta:
         model = Application

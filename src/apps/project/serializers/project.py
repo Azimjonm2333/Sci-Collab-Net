@@ -32,6 +32,20 @@ class ProjectListSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectApplicationSerializer(serializers.ModelSerializer):
+
+    user = UserShortSerializer()
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'user',
+            'name'
+        )
+
+
+
 
 class ProjectDetailSerializer(serializers.ModelSerializer):
 

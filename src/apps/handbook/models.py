@@ -77,7 +77,7 @@ class Chat(Timestampble):
     class Meta:
         verbose_name = 'Чат'
         verbose_name_plural = 'Чаты'
-        ordering = ('-id',)
+        ordering = ('created_at',)
 
 
 

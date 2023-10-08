@@ -8,7 +8,9 @@ from src.apps.handbook.views import (
     FavoritesListCreateView,
     FavoritesDestroyView,
     ChatListCreateView,
-    ChatRetrieveUpdateDestroyView
+    ChatRetrieveUpdateDestroyView,
+    ChatHistoryView,
+    ChatUserListWithLastMessageView,
 )
 
 urlpatterns = [
@@ -21,6 +23,9 @@ urlpatterns = [
     path('favorites/', FavoritesListCreateView.as_view(), name='favorites-list-create'),
     path('favorites/<int:pk>/', FavoritesDestroyView.as_view(), name='favorites-delete'),
     
-    path('chat/', ChatListCreateView.as_view(), name='chat-list-create'),
-    path('chat/<int:pk>/', ChatRetrieveUpdateDestroyView.as_view(), name='chat-delete'),
+    path('chats/', ChatListCreateView.as_view(), name='chat-list-create'),
+    path('chats/<int:pk>/', ChatRetrieveUpdateDestroyView.as_view(), name='chat-delete'),
+
+    path('chats/history/<int:to_user_id>/', ChatHistoryView.as_view(), name='chat-history'),
+    path('chats/users/', ChatUserListWithLastMessageView.as_view(), name='chat-user-list'),
 ]
