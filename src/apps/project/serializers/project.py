@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from src.apps.project.models import Project
 from src.apps.gallery.serializers import ImageSerializer
-from src.apps.handbook.models import Category, Image, Tag
+from src.apps.handbook.models import Category, Tag
+from src.apps.gallery.models import Image
 from src.apps.handbook.serializers import CategoryListSerializer, TagListSerializer
 from src.apps.accounts.serializers import UserShortSerializer
 
@@ -15,6 +16,7 @@ class ProjectListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
+            'id',
             'user',
             'categories',
             'tags',

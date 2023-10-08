@@ -1,9 +1,6 @@
 from src.utils.base.models import Timestampble, Permalinkable
 from django.db import models
 from slugify import slugify
-from src.apps.gallery.models import Image
-from src.apps.accounts.models import User
-from src.apps.handbook.models import Category, Tag
 
 
 def get_unique_string(name):
@@ -18,28 +15,28 @@ def get_unique_string(name):
 
 class Project(Timestampble, Permalinkable):
     user = models.ForeignKey(
-        User,
+        'accounts.User',
         verbose_name="Пользователь",
         on_delete=models.CASCADE,
         related_name='projects_created'
     )
     categories = models.ManyToManyField(
-        Category,
+        'handbook.Category',
         verbose_name="Категории",
     )
     tags = models.ManyToManyField(
-        Tag,
+        'handbook.Tag',
         verbose_name="Теги",
         blank=True
     )
     members = models.ManyToManyField(
-        User,
+        'accounts.User',
         verbose_name="Участники",
         blank=True,
         related_name='projects_contributed'
     )
     images = models.ManyToManyField(
-        Image,
+        'gallery.Image',
         verbose_name="Изображения",
         blank=True
     )
@@ -101,7 +98,7 @@ class Application(Timestampble):
         on_delete=models.CASCADE,
     )
     user = models.ForeignKey(
-        User,
+        'accounts.User',
         verbose_name="Пользователь",
         on_delete=models.CASCADE,
     )

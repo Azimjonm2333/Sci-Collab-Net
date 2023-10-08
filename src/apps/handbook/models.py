@@ -1,7 +1,6 @@
 from src.utils.base.models import Timestampble, Permalinkable
 from django.db import models
 from slugify import slugify
-from src.apps.gallery.models import Image
 
 
 class Tag(Timestampble, Permalinkable):
@@ -51,4 +50,55 @@ class Category(Timestampble, Permalinkable):
         verbose_name_plural = 'Категории'
         ordering = ('-id',)
 
+
+
+
+class Chat(Timestampble):
+    from_user = models.ForeignKey(
+        'accounts.User',
+        verbose_name="От кого",
+        related_name='from_user',
+        on_delete=models.CASCADE,
+    )
+    to_user = models.ForeignKey(
+        'accounts.User',
+        verbose_name="Кому",
+        related_name='to_user',
+        on_delete=models.CASCADE,
+    )
+    message = models.TextField(
+        verbose_name="Сообщение"
+    )
+
+    def __str__(self):
+        return f"{self.from_user.username} - {self.message}"
+
+
+    class Meta:
+        verbose_name = 'Чат'
+        verbose_name_plural = 'Чаты'
+        ordering = ('-id',)
+
+
+
+
+class Favorites(models.Model):
+    user = models.ForeignKey(
+        'accounts.User',
+        verbose_name="Пользователь",
+        on_delete=models.CASCADE
+    )
+    project = models.ForeignKey(
+        'project.Project',
+        verbose_name="Проект",
+        on_delete=models.CASCADE
+    )
+
+    class Meta:
+        verbose_name = "Избранное"
+        verbose_name_plural = "Избранные"
+        ordering = ['-id']
+
+    def __str__(self) -> str:
+        return f"{self.user.username} - {self.project.name}"
 
