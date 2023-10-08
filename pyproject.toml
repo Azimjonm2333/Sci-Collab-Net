@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "CBE"
+version = "0.1.0"
+description = ""
+authors = ["Azimjon <azimausupov@gmail.com>"]
+readme = "README.md"
+packages = [{include = "CBE"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+djangorestframework = "^3.14.0"
+python-dotenv = "^1.0.0"
+django-cors-headers = "^4.2.0"
+pillow = "^10.0.0"
+djangorestframework-simplejwt = "^5.2.2"
+requests = "^2.31.0"
+psycopg2-binary = "^2.9.6"
+drf-spectacular = "^0.26.4"
+model-bakery = "^1.13.0"
+gunicorn = "^21.2.0"
+python-slugify = "^8.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,41 @@
+# Byte-compiled / optimized Python files
+*.pyc
+__pycache__/
+
+# Django development server
+*.log
+
+# # SQLite database file
+# *.db.sqlite3
+# db.sqlite3
+# sqlite3.db
+
+# Media files (uploads)
+media/
+
+# Static files (collectstatic)
+staticfiles/
+/static/
+
+# Django secret key
+*.key
+
+.idea
+
+new.md
+tz.md
+
+# Environment variables file
+#  .env
+
+# Compiled translations
+locale/
+
+# Pipenv virtual environment
+/.venv/
+venv/
+
+# Mac OS files
+.DS_Store
+
+test
