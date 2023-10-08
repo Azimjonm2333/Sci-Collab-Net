@@ -35,12 +35,7 @@ INSTALLED_APPS = [
     'src.apps.gallery',
     'src.apps.handbook',
     'src.apps.project',
-    # 'src.apps.favorites',
-    # 'src.apps.orders',
-    # 'src.apps.fakedata',
-    # 'src.apps.company',
-    # 'src.apps.storage',
-    # 'src.apps.wallet',
+    'src.apps.post_info'
 ]
 
 

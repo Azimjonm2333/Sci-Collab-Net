@@ -21,8 +21,6 @@ class ApplicationListSerializer(serializers.ModelSerializer):
 
 
 class ApplicationCreateSerializer(serializers.ModelSerializer):
-    
-    project = ProjectApplicationSerializer()
 
     class Meta:
         model = Application
