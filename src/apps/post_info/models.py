@@ -23,6 +23,51 @@ class Like(Timestampble):
         verbose_name_plural = 'Лайки'
 
 
+
+class View(Timestampble):
+    project = models.ForeignKey(
+        'project.Project',
+        verbose_name="Проект",
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        'accounts.User',
+        verbose_name="Пользователь",
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return f"{self.user.full_name} - {self.project.name}"
+
+    class Meta:
+        verbose_name = 'Просмотр'
+        verbose_name_plural = 'Просмотры'
+
+
+
+
+
+class Download(Timestampble):
+    project = models.ForeignKey(
+        'project.Project',
+        verbose_name="Проект",
+        on_delete=models.CASCADE,
+    )
+    user = models.ForeignKey(
+        'accounts.User',
+        verbose_name="Пользователь",
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self):
+        return f"{self.user.full_name} - {self.project.name}"
+
+    class Meta:
+        verbose_name = 'Загрузка'
+        verbose_name_plural = 'Загрузки'
+
+
+
 class Comment(Timestampble):
     
     user = models.ForeignKey(
