@@ -1,78 +1,89 @@
 from rest_framework.permissions import IsAuthenticated
-from src.apps.handbook.models import Chat
+from rest_framework.response import Response
+
 from src.apps.handbook.serializers import *
-from rest_framework import generics
+from src.apps.handbook.models import Message, Chat
+from rest_framework import generics, status
 from rest_framework.filters import SearchFilter, OrderingFilter
-from django.db.models import Max, F, Q
+from django.db.models import Q
 
 
-class ChatRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+
+
+def get_chat_with_user(user1_id, user2_id):
+    chat = Message.objects.none()
+    chats = Chat.objects.filter(Q(participants=user2_id) | Q(participants=user1_id)).distinct().prefetch_related('participants')
+    for x in chats:
+        if len(x.participants.all()) == 2:
+            chat = x
+            break
+    return Message.objects.filter(chat=chat).distinct() if chat else chat
+
+
+
+class MessageRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     """
-    A ViewSet for Retrieve Update Destroy a single Favorite.
+    A ViewSet for Retrieve Update Destroy a single Message.
     """
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return Chat.objects.filter(from_user=self.request.user)
+        return Message.objects.filter(chat__participants=self.request.user)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return ChatCreateSerializer
-        return ChatUpdateSerializer
+            return MessageCreateSerializer
+        return MessageUpdateSerializer
 
 
-class ChatListCreateView(generics.ListCreateAPIView):
+
+
+class MessageListCreateView(generics.ListCreateAPIView):
     """
-    A ViewSet for creating a single Favorite.
+    A ViewSet for creating a single Message.
     """
     permission_classes = (IsAuthenticated,)
     filter_backends = (SearchFilter, OrderingFilter,)
-    search_fields = ('project__name',)
+    search_fields = ('message',)
 
     def get_queryset(self):
-        return Chat.objects.filter(Q(from_user=self.request.user) | Q(to_user=self.request.user))
+        return Message.objects.filter(chat__participants=self.request.user)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
-            return ChatCreateSerializer
-        return ChatListSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(from_user=self.request.user)
+            return MessageCreateSerializer
+        return MessageListSerializer
 
 
-class ChatHistoryView(generics.ListAPIView):
+    def create(self, serializer):
+        serializer = self.get_serializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save(sender=self.request.user)
+
+        return Response(MessageListSerializer(instance).data, status=status.HTTP_201_CREATED)
+
+
+
+class MessageHistoryView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = ChatListSerializer
+    serializer_class = MessageListSerializer
 
     def get_queryset(self):
         to_user_id = self.kwargs.get('to_user_id')
-        return Chat.objects.filter(
-            (Q(to_user_id=to_user_id, from_user=self.request.user) | Q(from_user_id=to_user_id, to_user=self.request.user))
-        )
+        messages = get_chat_with_user(to_user_id, self.request.user.id)
+        return messages
 
 
-class ChatUserListWithLastMessageView(generics.ListAPIView):
+class MessageUserListWithLastMessageView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
-    serializer_class = ChatListSerializer
+    serializer_class = MessageListSerializer
 
     def get_queryset(self):
-        unique_user_pairs = Chat.objects.filter(
-            Q(from_user=self.request.user) | Q(to_user=self.request.user)
-        ).values('from_user', 'to_user').distinct()
+        unique_user_pairs = Message.objects.filter(chat__participants=1).distinct()
 
-        user_ids = set()
+        chats = {}
         for pair in unique_user_pairs:
-            user_ids.add(pair['from_user'])
-            user_ids.add(pair['to_user'])
-
-        user_ids.remove(self.request.user.id)
-
-        last_messages = []
-        for user_id in user_ids:
-            last_message = Chat.objects.filter(
-                Q(from_user=self.request.user, to_user=user_id) | Q(from_user=user_id, to_user=self.request.user)
-            ).latest('created_at')
-            last_messages.append(last_message)
+            chats[pair.chat.id] = pair
+        last_messages = list(chats.values())
 
         return last_messages

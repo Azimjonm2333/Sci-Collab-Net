@@ -3,9 +3,9 @@ from .models import (
     Tag,
     Category,
     Favorites,
-    Chat
+    Chat,
+    Message,
 )
-from django.utils.safestring import mark_safe
 
 
 @admin.register(Tag)
@@ -98,20 +98,38 @@ class ChatAdmin(admin.ModelAdmin):
     """
     Административная панель для модели Chat.
     """
+    list_filter = (
+        'participants',
+    )
+    autocomplete_fields = (
+        'participants',
+    )
+    search_fields = (
+        'participants__username',
+    )
+
+
+
+
+@admin.register(Message)
+class MessageAdmin(admin.ModelAdmin):
+    """
+    Административная панель для модели Message.
+    """
     list_display = (
-        'from_user',
-        'to_user',
+        'chat',
+        'sender',
         'message'
     )
     search_fields = (
-        'from_user',
-        'to_user',
+        'chat',
+        'sender',
     )
     list_filter = (
-        'from_user',
-        'to_user',
+        'chat',
+        'sender',
     )
     autocomplete_fields = (
-        'from_user',
-        'to_user',
+        'chat',
+        'sender',
     )

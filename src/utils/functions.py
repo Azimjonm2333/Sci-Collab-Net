@@ -4,7 +4,7 @@ import random
 import string
 import uuid
 import requests
-from django.core.mail import send_mail
+
 
 
 def reduce_path(file_name, times):
@@ -48,6 +48,7 @@ def generate_unique_string(length):
 def generate_password(length: int = 8) -> str:
     characters = string.ascii_letters + string.digits
     return ''.join(random.choice(characters) for _ in range(length))
+
 
 
 
