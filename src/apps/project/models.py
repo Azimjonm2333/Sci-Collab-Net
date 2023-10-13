@@ -1,7 +1,7 @@
 from src.utils.base.models import Timestampble, Permalinkable
 from django.db import models
 from slugify import slugify
-from src.apps.post_info.models import Like, Comment
+from src.apps.post_info.models import Like, Comment, View
 
 
 def get_unique_string(name):
@@ -87,6 +87,14 @@ class Project(Timestampble, Permalinkable):
     def update_likes_count(self):
         self.likes_count = Like.objects.filter(project=self).count()
         self.save(update_fields=['likes_count'])
+
+    def update_views_count(self):
+        self.views_count = View.objects.filter(project=self).count()
+        self.save(update_fields=['views_count'])
+
+    def update_downloads_count(self):
+        self.downloads_count = View.objects.filter(project=self).count()
+        self.save(update_fields=['downloads_count'])
 
     def update_comments_count(self):
         self.comments_count = Comment.objects.filter(project=self).count()

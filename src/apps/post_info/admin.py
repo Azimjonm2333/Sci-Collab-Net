@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Like, Comment
+from .models import Like, Comment, View, Download
 
 
 
@@ -20,6 +20,48 @@ class LikeAdmin(admin.ModelAdmin):
         'project',
         'user',
     )
+
+
+
+@admin.register(View)
+class ViewAdmin(admin.ModelAdmin):
+    """
+    Административная панель для модели View.
+    """
+    list_display = (
+        'project',
+        'user',
+    )
+    list_filter = (
+        'project',
+        'user',
+    )
+    autocomplete_fields = (
+        'project',
+        'user',
+    )
+
+
+
+
+@admin.register(Download)
+class DownloadAdmin(admin.ModelAdmin):
+    """
+    Административная панель для модели Download.
+    """
+    list_display = (
+        'project',
+        'user',
+    )
+    list_filter = (
+        'project',
+        'user',
+    )
+    autocomplete_fields = (
+        'project',
+        'user',
+    )
+
 
 
 @admin.register(Comment)
