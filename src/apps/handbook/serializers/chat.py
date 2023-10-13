@@ -5,21 +5,16 @@ from src.apps.accounts.serializers import UserUsernameSerializer
 
 class ChatListSerializer(serializers.ModelSerializer):
 
-    from_user = UserUsernameSerializer()
-    to_user = UserUsernameSerializer()
+    participants = UserUsernameSerializer(many=True)
 
     class Meta:
         model = Chat
-        fields = ('id', 'from_user', 'to_user', 'message', 'created_at', 'updated_at',)
+        fields = ('id', 'participants',)
+
 
 class ChatCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Chat
-        fields = ('id', 'to_user', 'message',)
+        fields = ('id', 'participants',)
 
-class ChatUpdateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Chat
-        fields = ('id', 'message',)

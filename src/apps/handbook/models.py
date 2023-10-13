@@ -51,32 +51,45 @@ class Category(Timestampble, Permalinkable):
         ordering = ('-id',)
 
 
-
-
 class Chat(Timestampble):
-    from_user = models.ForeignKey(
-        'accounts.User',
-        verbose_name="От кого",
-        related_name='from_user',
-        on_delete=models.CASCADE,
+
+    participants = models.ManyToManyField('accounts.User', related_name='chats')
+
+    def __str__(self):
+        return ', '.join([str(participant) for participant in self.participants.all()])
+
+    class Meta:
+        verbose_name = 'Чат'
+        verbose_name_plural = 'Чаты'
+        ordering = ('created_at',)
+
+
+
+
+class Message(Timestampble):
+    chat = models.ForeignKey(
+        Chat,
+        verbose_name="Чат",
+        related_name='messages',
+        on_delete=models.CASCADE
     )
-    to_user = models.ForeignKey(
+    sender = models.ForeignKey(
         'accounts.User',
-        verbose_name="Кому",
-        related_name='to_user',
-        on_delete=models.CASCADE,
+        verbose_name="Отправитель",
+        related_name='sent_messages',
+        on_delete=models.CASCADE
     )
     message = models.TextField(
         verbose_name="Сообщение"
     )
 
     def __str__(self):
-        return f"{self.from_user.username} - {self.message}"
+        return f"{self.sender.username} - {self.message}"
 
 
     class Meta:
-        verbose_name = 'Чат'
-        verbose_name_plural = 'Чаты'
+        verbose_name = 'Сообщения'
+        verbose_name_plural = 'Сообщении'
         ordering = ('created_at',)
 
 
