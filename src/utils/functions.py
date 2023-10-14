@@ -4,7 +4,7 @@ import random
 import string
 import uuid
 import requests
-
+from django.core.mail import send_mail
 
 
 def reduce_path(file_name, times):
@@ -40,6 +40,13 @@ def send_sms_notification(phone_numbers: list | str, message: str):
     return not bool(result)
 
 
+def send_email_notification(subject: str, message: str, recipients: list | str) -> None:
+    from_email = 'send.message.2333@gmail.com'
+    if isinstance(recipients, str):
+        recipients = [recipients]
+    send_mail(subject, message, from_email, recipients)
+
+
 def generate_unique_string(length):
     generated_string = str(uuid.uuid4())[:length]
     return generated_string
@@ -48,7 +55,3 @@ def generate_unique_string(length):
 def generate_password(length: int = 8) -> str:
     characters = string.ascii_letters + string.digits
     return ''.join(random.choice(characters) for _ in range(length))
-
-
-
-

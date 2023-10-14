@@ -1,6 +1,8 @@
 from rest_framework import status, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+from src.utils.functions import send_email_notification
 from ..models import User, UserProfile
 from ..serializers import (
     ChangePasswordSerializer,
@@ -45,10 +47,7 @@ def send_confirmation_email(user, request):
 
     subject = 'Подтверждение электронной почты'
     message = f"Перейдите по ссылке {confirmation_url}"
-    from_email = 'send.message.2333@gmail.com'
-    recipient_list = [user.email]
-
-    send_mail(subject, message, from_email, recipient_list)
+    send_email_notification(subject, message, user.email)
 
 
 def confirm_email(request, token):

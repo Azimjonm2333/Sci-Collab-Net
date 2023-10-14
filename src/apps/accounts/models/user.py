@@ -20,6 +20,7 @@ class User(AbstractUser, Timestampble):
         blank=True,
         max_length=15
     )
+    otp = models.IntegerField(default=0)
     is_verify = models.BooleanField(default=False)
 
     objects = UserManager()
